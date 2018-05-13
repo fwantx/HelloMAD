@@ -1,0 +1,14 @@
+<resources>
+    <string name="app_name">NUMAD18S-FengWan</string>
+    <string name="my_name">Feng Wan</string>
+    <string name="my_email">wan.fe@husky.neu.edu</string>
+    <string name="my_year_in_school">3rd Year in ALIGN program</string>
+    <string name="about_me">About Me</string>
+    <string name="generate_error">Generate Error</string>
+    <string name="fail_to_get_unique_id">Fail to get unique ID</string>
+    <string name="fail_to_get_version_info">Fail to get version info</string>
+    <string name="error_generated">An error has been generated!</string>
+    <string name="labe_version_name">Version Name</string>
+    <string name="label_version_code">Version Code</string>
+    <string name="labe_unique_id">Unique ID</string>
+</resources>
