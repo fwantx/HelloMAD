@@ -54,4 +54,10 @@ public class MainActivity extends AppCompatActivity {
     public void generateError(View view) {
         throw new RuntimeException(ErrorGenerated);
     }
+
+    // Show dictionary page
+    public void showDictionary(View view) {
+        Intent intent = new Intent(this, DictionaryActivity.class);
+        startActivity(intent);
+    }
 }

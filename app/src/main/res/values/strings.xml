@@ -11,4 +11,12 @@
     <string name="labe_version_name">Version Name</string>
     <string name="label_version_code">Version Code</string>
     <string name="labe_unique_id">Unique ID</string>
+    <string name="type_a_word">Type a word here ...</string>
+    <string name="word_list_title">Words added:</string>
+    <string name="dictionary">Dicionary</string>
+    <string name="acknowledgments">Acknowledgments</string>
+    <string name="stack_overflow">I got a lot of technical help from\nhttps://stackoverflow.com/questions/tagged/android</string>
+    <string name="icon_generator">I created my app icon on\nhttps://romannurik.github.io/AndroidAssetStudio/icons-launcher.html</string>
+    <string name="beep_sound">I download the beep sound from\nhttps://notificationsounds.com/notification-sounds/plucky-564</string>
+    <string name="clear">Clear</string>
 </resources>
