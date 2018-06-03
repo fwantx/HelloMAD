@@ -1,12 +1,13 @@
 package edu.neu.madcourse.fengwan;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.media.MediaPlayer;
+import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -18,11 +19,11 @@ import java.util.HashSet;
 import java.util.Set;
 
 public class DictionaryActivity extends AppCompatActivity {
-    Trie wordTrie;
-    Set<String> wordSet;
-    TextView wordListTextView;
+    TextView detectedWordsTextView;
     MediaPlayer sound;
-    Set<String> dictSet;
+    ProgressDialog progressDialog;
+    Set<String> dictionary;
+    Set<String> detectedWords;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,26 +31,19 @@ public class DictionaryActivity extends AppCompatActivity {
         setContentView(R.layout.activity_dictionary);
         getSupportActionBar().setTitle("Test Dictionary");
 
-        wordTrie = new Trie();
-        wordSet = new HashSet<>();
-        wordListTextView = findViewById(R.id.textView8);
+        detectedWords = new HashSet<>();
+        detectedWordsTextView = findViewById(R.id.textView8);
 
         App app = (App) getApplicationContext();
-        dictSet = app.getDictSet();
-        if (dictSet == null) {
-            dictSet = new HashSet<>();
-            // populate data
-            try (InputStream inputStream = getResources().openRawResource(R.raw.wordlist);
-                 BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream))) {
-                String line;
-                while ((line = reader.readLine()) != null) {
-//                wordTrie.insert(line.trim().toLowerCase());
-                    dictSet.add(line.trim().toLowerCase());
-                }
-                app.setDictSet(dictSet);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+        dictionary = app.getDictionary();
+        // initialize dictionary if not already initialized
+        if (dictionary == null) {
+            new LoadDictionary().execute();
+
+            progressDialog = new ProgressDialog(DictionaryActivity.this);
+            progressDialog.setMessage("Loading Dictionary...");
+            progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+            progressDialog.show();
         }
 
         EditText inputEditText = findViewById(R.id.editText);
@@ -68,31 +62,30 @@ public class DictionaryActivity extends AppCompatActivity {
             @Override
             public void afterTextChanged(Editable s) {
                 String str = s.toString().trim().toLowerCase();
-//                if (s.length() > 2 && wordTrie.contains(str)) {
-                if (s.length() > 2 && dictSet.contains(str)) {
-                    playSound();
-
-                    wordSet.add(str);
+                if (s.length() > 2 && dictionary.contains(str)) {
+                    detectedWords.add(str);
                     updateWordsView();
+                    playSound();
                 }
             }
         });
     }
 
+    // Open Ackknowledgements page
     public void showAcknowledgements(View view) {
         Intent intent = new Intent(this, AcknowledgementsActivity.class);
         startActivity(intent);
     }
 
+    // Clear input and detected words
     public void clearInput(View view) {
         EditText userInput = findViewById(R.id.editText);
         userInput.setText("");
-
-        wordSet.clear();
+        detectedWords.clear();
         updateWordsView();
     }
 
-    // play sound
+    // Play sound
     public void playSound() {
         if (sound != null) {
             sound.stop();
@@ -104,14 +97,40 @@ public class DictionaryActivity extends AppCompatActivity {
         }
     }
 
-    // update words view
+    // Update detected words text view
     public void updateWordsView() {
-        // display data
-        String string = "";
-        for (String word : wordSet) {
-            string += word + "\n";
+        String str = "";
+        for (String word : detectedWords) {
+            str += word + "\n";
         }
-        wordListTextView.setText(string);
+        detectedWordsTextView.setText(str);
     }
 
+
+    // Load data into dictionary
+    private class LoadDictionary extends AsyncTask<Void, Integer, Void> {
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+            App app = (App) getApplicationContext();
+            dictionary = new HashSet<>();
+            try (InputStream inputStream = getResources().openRawResource(R.raw.wordlist);
+                 BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream))) {
+                String line;
+                while ((line = reader.readLine()) != null) {
+                    dictionary.add(line.trim().toLowerCase());
+                }
+                app.setDictionary(dictionary);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            return null;
+        }
+
+        protected void onPostExecute(Void v) {
+            if (progressDialog != null && progressDialog.isShowing()) {
+                progressDialog.dismiss();
+            }
+        }
+    }
 }

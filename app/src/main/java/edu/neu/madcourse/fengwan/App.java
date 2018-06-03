@@ -5,13 +5,13 @@ import android.app.Application;
 import java.util.Set;
 
 public class App extends Application {
-    private Set<String> dictSet;
+    private Set<String> dictionary;
 
-    public Set<String> getDictSet() {
-        return dictSet;
+    public Set<String> getDictionary() {
+        return dictionary;
     }
 
-    public void setDictSet(Set<String> dictSet) {
-        this.dictSet = dictSet;
+    public void setDictionary(Set<String> dictionary) {
+        this.dictionary = dictionary;
     }
 }
