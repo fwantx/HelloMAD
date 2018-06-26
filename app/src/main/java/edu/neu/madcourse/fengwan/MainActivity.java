@@ -60,4 +60,9 @@ public class MainActivity extends AppCompatActivity {
         Intent intent = new Intent(this, DictionaryActivity.class);
         startActivity(intent);
     }
+
+    public void showWordGame(View view) {
+        Intent intent = new Intent(this, WordGameActivity.class);
+        startActivity(intent);
+    }
 }

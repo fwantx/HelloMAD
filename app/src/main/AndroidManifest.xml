@@ -37,7 +37,8 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".MainActivity" />
         </activity>
-        <activity android:name=".AcknowledgementsActivity"
+        <activity
+            android:name=".AcknowledgementsActivity"
             android:parentActivityName=".DictionaryActivity">
 
             <!-- The meta-data tag is required if you support API level 15 and lower -->
@@ -45,6 +46,8 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".DictionaryActivity" />
         </activity>
+        <activity android:name=".WordGameActivity" />
+        <activity android:name=".GameActivity"></activity>
     </application>
 
 </manifest>
