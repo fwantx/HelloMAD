@@ -23,7 +23,7 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 
-    <string name="long_app_name">Ultimate Tic Tac Toe</string>
+    <string name="long_app_name">Scroggle by Feng Wan</string>
     <string name="action_settings">Settings</string>
     <string name="restart_label">Restart</string>
     <string name="main_menu_label">Main Menu</string>

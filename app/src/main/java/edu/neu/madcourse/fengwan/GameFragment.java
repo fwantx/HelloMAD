@@ -26,16 +26,15 @@ public class GameFragment extends Fragment {
             R.id.small4, R.id.small5, R.id.small6, R.id.small7, R.id.small8,
             R.id.small9,};
 
-    private Tile mEntireBoard = new Tile('a', 0);
+    private Tile mEntireBoard = new Tile(this, 'a', 0);
     private Tile mLargeTiles[] = new Tile[9];
     private Tile mSmallTiles[][] = new Tile[9][9];
-    private int phase;
-    private int timerValue;
+    private int phaseValue, timeValue, scoreValue;
 
     private Set<Tile> mAvailable = new HashSet<Tile>();
     private Runnable runnable;
     private Handler handler = new Handler();
-    private TextView timer;
+    private TextView phaseView, timeView, scoreView;
     private Set<String> dictionary;
 
     public void setDictionary(Set<String> dictionary) {
@@ -49,8 +48,6 @@ public class GameFragment extends Fragment {
         setRetainInstance(true);
         initGame();
 
-//        dictionary = ((GameActivity)getActivity()).getDictionary();
-//        Log.d("XXX XXX YYY YYY ZZZ ZZZ", "onCreate: " + dictionary.size());
         runnable = new Runnable() {
             @Override
             public void run() {
@@ -60,17 +57,20 @@ public class GameFragment extends Fragment {
     }
 
     private void startTimer() {
-        timer.setText(String.valueOf(timerValue));
-        if (timerValue == 0) {
+        timeView.setText("Time Left:\n" + timeValue);
+        if (timeValue == 0) {
             handler.removeCallbacks(runnable);
+        } else if (dictionary.isEmpty()) {
+            handler.postDelayed(runnable, 1000);
         } else {
-            if (timerValue == 20) {
+            if (timeValue == 30) {
                 clearBadWords();
-                phase = 2;
+                phaseValue = 2;
+                phaseView.setText("Phase:\n" + phaseValue);
                 updateAvailable();
                 updateAllTiles();
             }
-            timerValue--;
+            timeValue--;
             handler.postDelayed(runnable, 1000);
         }
     }
@@ -115,10 +115,15 @@ public class GameFragment extends Fragment {
         View rootView =
                 inflater.inflate(R.layout.fragment_game, container, false);
         initViews(rootView);
-        updateAllTiles();
 
-        timer = rootView.findViewById(R.id.timer);
-        timer.setText(String.valueOf(timerValue));
+        timeView = rootView.findViewById(R.id.time_view);
+        timeView.setText("Time Left:\n" + timeValue);
+        scoreView = rootView.findViewById(R.id.score_view);
+        scoreView.setText("Score:\n" + scoreValue);
+        phaseView = rootView.findViewById(R.id.phase_view);
+        phaseView.setText("Phase:\n" + phaseValue);
+
+        updateAllTiles();
         return rootView;
     }
 
@@ -145,20 +150,20 @@ public class GameFragment extends Fragment {
                 inner.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        if (phase == 1) {
+                        if (phaseValue == 1) {
                             if (isAvailable(smallTile)) {
                                 makeMove(fLarge, fSmall);
                             } else if (smallTile == selected.peekLast()) {
                                 cancelMove(fLarge);
                             }
-                        } else if (phase == 2) {
+                        } else if (phaseValue == 2) {
                             if (isAvailable(smallTile)) {
                                 makeMove(fLarge, fSmall);
                             } else if (smallTile == selectedAgain.peekLast()) {
                                 cancelMove(fLarge);
                             }
                         }
-                        String word = getWordOfLargeTile(fLarge, phase);
+                        String word = getWordOfLargeTile(fLarge, phaseValue);
                         if (dictionary.contains(word)) {
                             ((GameActivity)getActivity()).playSound();
                         }
@@ -171,11 +176,11 @@ public class GameFragment extends Fragment {
     private void makeMove(int large, int small) {
         Tile smallTile = mSmallTiles[large][small];
         Tile largeTile = mLargeTiles[large];
-        if (phase == 1) {
+        if (phaseValue == 1) {
             Deque<Tile> selected = largeTile.getSelectedTiles();
             smallTile.setStatus(1);
             selected.addLast(smallTile);
-        } else if (phase == 2) {
+        } else if (phaseValue == 2) {
             Deque<Tile> selectedAgain = mEntireBoard.getSelectedTiles();
             smallTile.setStatus(2);
             selectedAgain.addLast(smallTile);
@@ -186,11 +191,11 @@ public class GameFragment extends Fragment {
 
     public void cancelMove(int large) {
         Tile largeTile = mLargeTiles[large];
-        if (phase == 1) {
+        if (phaseValue == 1) {
             Deque<Tile> selected = largeTile.getSelectedTiles();
             Tile last = selected.pollLast();
             last.setStatus(0);
-        } else if (phase == 2) {
+        } else if (phaseValue == 2) {
             Deque<Tile> selectedAgain = mEntireBoard.getSelectedTiles();
             Tile last = selectedAgain.pollLast();
             last.setStatus(1);
@@ -222,20 +227,21 @@ public class GameFragment extends Fragment {
         };
 
         Random random = new Random();
-        mEntireBoard = new Tile('a', 0);
+        mEntireBoard = new Tile(this, 'a', 0);
         // Create all the tiles
         for (int large = 0; large < 9; large++) {
-            mLargeTiles[large] = new Tile('a', large);
+            mLargeTiles[large] = new Tile(this, 'a', large);
             for (int small = 0; small < 9; small++) {
                 int index = large * 9 + small;
-                mSmallTiles[large][small] = new Tile(char_arr[index], index);
+                mSmallTiles[large][small] = new Tile(this, char_arr[index], index);
             }
             mLargeTiles[large].setSelectedTiles(new ArrayDeque<Tile>());
         }
         mEntireBoard.setSelectedTiles(new ArrayDeque<Tile>());
 
-        phase = 1;
-        timerValue = 40;
+        phaseValue = 1;
+        timeValue = 60;
+        scoreValue = 0;
         updateAvailable();
     }
 
@@ -277,7 +283,7 @@ public class GameFragment extends Fragment {
         for (int l = 0; l < 9; l++) {
             Tile largeTile = mLargeTiles[l];
             Deque<Tile> selected = largeTile.getSelectedTiles();
-            if (phase == 1) {
+            if (phaseValue == 1) {
                 for (int s = 0; s < 9; s++) {
                     Tile tile = mSmallTiles[l][s];
                     if (selected.isEmpty()) {
@@ -289,7 +295,7 @@ public class GameFragment extends Fragment {
                         }
                     }
                 }
-            } else if (phase == 2) {
+            } else if (phaseValue == 2) {
                 if (isAlreadySelected(l) || selected.isEmpty()) {
                     continue;
                 } else {
@@ -305,22 +311,44 @@ public class GameFragment extends Fragment {
 
     private void updateAllTiles() {
         mEntireBoard.updateDrawableState();
+        scoreValue = 0;
+        String word = getWordOfLargeTile(0, 2);
+        if (dictionary != null && dictionary.contains(word)) {
+            scoreValue += word.length() * 10;
+        }
         for (int large = 0; large < 9; large++) {
-            mLargeTiles[large].updateDrawableState();
+            Tile largeTile = mLargeTiles[large];
+            largeTile.updateDrawableState();
+
+            String w = getWordOfLargeTile(large, 1);
+            if (dictionary != null && dictionary.contains(w)) {
+                scoreValue += w.length() * 5;
+            }
             for (int small = 0; small < 9; small++) {
-                if (phase == 2) mSmallTiles[large][small].setPhase(2);
-                mSmallTiles[large][small].updateDrawableState();
+                Tile smallTile = mSmallTiles[large][small];
+                if (phaseValue == 2) smallTile.setPhase(2);
+                smallTile.updateDrawableState();
+
+                Tile currentBoard = phaseValue == 1 ? largeTile : mEntireBoard;
+                if (currentBoard.getSelectedTiles().isEmpty() || currentBoard.getSelectedTiles().peekLast() != smallTile) {
+                    smallTile.cancelAnimation();
+                } else {
+                    smallTile.startAnimation();
+                }
             }
         }
+        scoreView.setText("Score:\n" + scoreValue);
     }
 
     /** Create a string containing the state of the game. */
     public String getState() {
         handler.removeCallbacks(runnable);
         StringBuilder builder = new StringBuilder();
-        builder.append(phase);
+        builder.append(phaseValue);
         builder.append(',');
-        builder.append(timerValue);
+        builder.append(timeValue);
+        builder.append(',');
+        builder.append(scoreValue);
         builder.append(',');
         for (int large = 0; large < 9; large++) {
             for (int small = 0; small < 9; small++) {
@@ -357,8 +385,9 @@ public class GameFragment extends Fragment {
     public void putState(String gameData) {
         String[] fields = gameData.split(",");
         int index = 0;
-        phase = Integer.parseInt(fields[index++]);
-        timerValue = Integer.parseInt(fields[index++]);
+        phaseValue = Integer.parseInt(fields[index++]);
+        timeValue = Integer.parseInt(fields[index++]);
+        scoreValue = Integer.parseInt(fields[index++]);
         for (int large = 0; large < 9; large++) {
             for (int small = 0; small < 9; small++) {
                 Tile smallTile = mSmallTiles[large][small];
@@ -383,6 +412,7 @@ public class GameFragment extends Fragment {
             Tile smallTile = mSmallTiles[tileIndex / 9][tileIndex % 9];
             mEntireBoard.getSelectedTiles().addLast(smallTile);
         }
+        scoreView.setText("Score:\n" + scoreValue);
         updateAvailable();
         updateAllTiles();
     }

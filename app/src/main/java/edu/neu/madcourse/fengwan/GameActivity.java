@@ -50,7 +50,6 @@ public class GameActivity extends Activity {
             progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
             progressDialog.show();
         }
-//        Log.d("TAG TAG TAG TAG TAG", "onCreate: " + dictionary.size());
 
         // Restore game here...
         mGameFragment = (GameFragment) getFragmentManager().findFragmentById(R.id.fragment_game);

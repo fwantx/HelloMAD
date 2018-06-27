@@ -1,13 +1,13 @@
 package edu.neu.madcourse.fengwan;
 
 
+import android.animation.Animator;
+import android.animation.AnimatorInflater;
 import android.graphics.drawable.Drawable;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 
 import java.util.Deque;
-import java.util.Stack;
 
 public class Tile {
 
@@ -20,6 +20,9 @@ public class Tile {
     private int status;
     private int index;
 
+    private GameFragment gameFragment;
+    private Animator animator;
+
     public int getPhase() {
         return phase;
     }
@@ -28,7 +31,8 @@ public class Tile {
         this.phase = phase;
     }
 
-    public Tile(char letter, int index) {
+    public Tile(GameFragment gameFragment, char letter, int index) {
+        this.gameFragment = gameFragment;
         this.letter = letter;
         this.index = index;
         this.phase = 1;
@@ -110,5 +114,24 @@ public class Tile {
 
     private int getLevel() {
         return this.letter - 'a';
+    }
+
+    public void startAnimation() {
+        if (animator == null) {
+            animator = AnimatorInflater.loadAnimator(
+                    gameFragment.getActivity(),
+                    R.animator.tictactoe
+            );
+        }
+        if (getView() != null) {
+            animator.setTarget(getView());
+            animator.start();
+        }
+    }
+
+    public void cancelAnimation() {
+        if (animator != null) {
+            animator.cancel();
+        }
     }
 }
