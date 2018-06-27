@@ -17,6 +17,7 @@ public class GameActivity extends Activity {
     public static final String KEY_RESTORE = "key_restore";
     public static final String PREF_RESTORE = "pref_restore";
     private GameFragment mGameFragment;
+    private ControlFragment mControlFragment;
     private Set<String> dictionary;
     ProgressDialog progressDialog;
     private MediaPlayer sound;
@@ -60,6 +61,7 @@ public class GameActivity extends Activity {
                 mGameFragment.putState(gameData);
             }
         }
+        mControlFragment = (ControlFragment) getFragmentManager().findFragmentById(R.id.fragment_game_controls);
         Log.d("UT3", "restore = " + restore);
     }
 
@@ -74,7 +76,7 @@ public class GameActivity extends Activity {
         getPreferences(MODE_PRIVATE).edit()
                 .putString(PREF_RESTORE, gameData)
                 .commit();
-        Log.d("UT3", "state = " + gameData);
+        mControlFragment.stopMusic();
     }
 
     protected void onResume() {
