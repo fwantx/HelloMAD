@@ -57,13 +57,17 @@ public class GameFragment extends Fragment {
     }
 
     private void startTimer() {
-        timeView.setText("Time Left:\n" + timeValue);
+        if (phaseValue == 1) {
+            timeView.setText("Time Left:\n" + (timeValue - 90));
+        } else if (phaseValue == 2){
+            timeView.setText("Time Left:\n" + timeValue);
+        }
         if (timeValue == 0) {
             handler.removeCallbacks(runnable);
         } else if (dictionary.isEmpty()) {
             handler.postDelayed(runnable, 1000);
         } else {
-            if (timeValue == 30) {
+            if (timeValue == 90) {
                 clearBadWords();
                 phaseValue = 2;
                 phaseView.setText("Phase:\n" + phaseValue);
@@ -117,7 +121,11 @@ public class GameFragment extends Fragment {
         initViews(rootView);
 
         timeView = rootView.findViewById(R.id.time_view);
-        timeView.setText("Time Left:\n" + timeValue);
+        if (phaseValue == 1) {
+            timeView.setText("Time Left:\n" + (timeValue - 90));
+        } else if (phaseValue == 2){
+            timeView.setText("Time Left:\n" + timeValue);
+        }
         scoreView = rootView.findViewById(R.id.score_view);
         scoreView.setText("Score:\n" + scoreValue);
         phaseView = rootView.findViewById(R.id.phase_view);
@@ -274,7 +282,7 @@ public class GameFragment extends Fragment {
         mEntireBoard.setSelectedTiles(new ArrayDeque<Tile>());
 
         phaseValue = 1;
-        timeValue = 60;
+        timeValue = 180;
         scoreValue = 0;
         updateAvailable();
     }
