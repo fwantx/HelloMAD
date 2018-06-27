@@ -23,6 +23,7 @@ public class WordGameFragment extends Fragment {
         View newButton = rootView.findViewById(R.id.new_button);
         View continueButton = rootView.findViewById(R.id.continue_button);
         View aboutButton = rootView.findViewById(R.id.about_button);
+        View ackButton = rootView.findViewById(R.id.acknowledgements_button);
         newButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -54,6 +55,12 @@ public class WordGameFragment extends Fragment {
                 mDialog = builder.show();
             }
         });
+        ackButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showAcknowledgements(view);
+            }
+        });
         return rootView;
     }
 
@@ -64,5 +71,11 @@ public class WordGameFragment extends Fragment {
         // Get rid of the about dialog if it's still up
         if (mDialog != null)
             mDialog.dismiss();
+    }
+
+    // Open Ackknowledgements page
+    public void showAcknowledgements(View view) {
+        Intent intent = new Intent(getActivity(), AcknowledgementsActivity.class);
+        startActivity(intent);
     }
 }

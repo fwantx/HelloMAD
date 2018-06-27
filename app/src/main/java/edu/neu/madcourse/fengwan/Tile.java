@@ -20,6 +20,12 @@ public class Tile {
     private int status;
     private int index;
 
+    public static final int STATUS_NONE = 0;
+    public static final int STATUS_SELECTED_IN_PHASE_ONE = 1;
+    public static final int STATUS_MATCHED_IN_PHASE_ONE = 2;
+    public static final int STATUS_SELECTED_IN_PHASE_TWO = 3;
+    public static final int STATUS_MATCHED_IN_PHASE_TWO = 4;
+
     private GameFragment gameFragment;
     private Animator animator;
 
@@ -36,7 +42,7 @@ public class Tile {
         this.letter = letter;
         this.index = index;
         this.phase = 1;
-        this.status = 0;
+        this.status = STATUS_NONE;
     }
 
     public View getView() {
@@ -80,19 +86,23 @@ public class Tile {
                 mView.setVisibility(View.VISIBLE);
             }
             if (mView.getBackground() != null) {
-                if (this.getStatus() == 1) {
+                if (this.getStatus() == STATUS_MATCHED_IN_PHASE_ONE) {
+                    mView.getBackground().setLevel(2);
+                } else if (this.getStatus() == STATUS_SELECTED_IN_PHASE_ONE) {
                     mView.getBackground().setLevel(1);
-                } else if (this.getStatus() == 0) {
+                } else if (this.getStatus() == STATUS_NONE) {
                     mView.getBackground().setLevel(0);
                 }
             }
         } else if (phase == 2) {
             if (mView.getBackground() != null) {
-                if (this.getStatus() == 2) {
+                if (this.getStatus() == STATUS_MATCHED_IN_PHASE_TWO) {
+                    mView.getBackground().setLevel(2);
+                } else if (this.getStatus() == STATUS_SELECTED_IN_PHASE_TWO) {
                     mView.getBackground().setLevel(1);
-                } else if (this.getStatus() == 1) {
+                } else if (this.getStatus() == STATUS_MATCHED_IN_PHASE_ONE) {
                     mView.getBackground().setLevel(0);
-                } else if (this.getStatus() == 0) {
+                } else if (this.getStatus() == STATUS_NONE) {
                     mView.setVisibility(View.INVISIBLE);
                 }
             }

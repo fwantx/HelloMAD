@@ -82,7 +82,7 @@ public class GameFragment extends Fragment {
             if (!word.isEmpty() && !dictionary.contains(word)) {
                 largeTile.getSelectedTiles().clear();
                 for (int small = 0; small < 9; small++) {
-                    mSmallTiles[large][small].setStatus(0);
+                    mSmallTiles[large][small].setStatus(Tile.STATUS_NONE);
                 }
             }
         }
@@ -163,10 +163,6 @@ public class GameFragment extends Fragment {
                                 cancelMove(fLarge);
                             }
                         }
-                        String word = getWordOfLargeTile(fLarge, phaseValue);
-                        if (dictionary.contains(word)) {
-                            ((GameActivity)getActivity()).playSound();
-                        }
                     }
                 });
             }
@@ -178,15 +174,47 @@ public class GameFragment extends Fragment {
         Tile largeTile = mLargeTiles[large];
         if (phaseValue == 1) {
             Deque<Tile> selected = largeTile.getSelectedTiles();
-            smallTile.setStatus(1);
+            smallTile.setStatus(Tile.STATUS_SELECTED_IN_PHASE_ONE);
             selected.addLast(smallTile);
         } else if (phaseValue == 2) {
             Deque<Tile> selectedAgain = mEntireBoard.getSelectedTiles();
-            smallTile.setStatus(2);
+            smallTile.setStatus(Tile.STATUS_SELECTED_IN_PHASE_TWO);
             selectedAgain.addLast(smallTile);
         }
+        setTileStatusAfterMove(large);
         updateAvailable();
         updateAllTiles();
+    }
+
+    public void setTileStatusAfterMove(int large) {
+        String word = getWordOfLargeTile(large, phaseValue);
+        Tile largeTile = mLargeTiles[large];
+        if (dictionary.contains(word)) {
+            ((GameActivity)getActivity()).playSound();
+            if (phaseValue == 1) {
+                Deque<Tile> selected = largeTile.getSelectedTiles();
+                for (Tile t : selected) {
+                    t.setStatus(Tile.STATUS_MATCHED_IN_PHASE_ONE);
+                }
+            } else if (phaseValue == 2) {
+                Deque<Tile> selected = mEntireBoard.getSelectedTiles();
+                for (Tile t : selected) {
+                    t.setStatus(Tile.STATUS_MATCHED_IN_PHASE_TWO);
+                }
+            }
+        } else {
+            if (phaseValue == 1) {
+                Deque<Tile> selected = largeTile.getSelectedTiles();
+                for (Tile t : selected) {
+                    t.setStatus(Tile.STATUS_SELECTED_IN_PHASE_ONE);
+                }
+            } else if (phaseValue == 2) {
+                Deque<Tile> selected = mEntireBoard.getSelectedTiles();
+                for (Tile t : selected) {
+                    t.setStatus(Tile.STATUS_SELECTED_IN_PHASE_TWO);
+                }
+            }
+        }
     }
 
     public void cancelMove(int large) {
@@ -194,17 +222,23 @@ public class GameFragment extends Fragment {
         if (phaseValue == 1) {
             Deque<Tile> selected = largeTile.getSelectedTiles();
             Tile last = selected.pollLast();
-            last.setStatus(0);
+            last.setStatus(Tile.STATUS_NONE);
         } else if (phaseValue == 2) {
             Deque<Tile> selectedAgain = mEntireBoard.getSelectedTiles();
             Tile last = selectedAgain.pollLast();
-            last.setStatus(1);
+            last.setStatus(Tile.STATUS_MATCHED_IN_PHASE_ONE);
         }
+        setTileStatusAfterMove(large);
         updateAvailable();
         updateAllTiles();
     }
 
     public void restartGame() {
+        for (int large = 0; large < 9; large++) {
+            for (int small = 0; small < 9; small++) {
+                mSmallTiles[large][small].cancelAnimation();
+            }
+        }
         initGame();
         initViews(getView());
         updateAllTiles();

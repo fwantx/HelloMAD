@@ -31,13 +31,15 @@
     <string name="continue_label">Continue</string>
     <string name="new_game_label">New Game</string>
     <string name="about_title">About Ultimate Tic Tac Toe</string>
-    <string name="about_label">About</string>
+    <string name="about_label">How to play</string>
     <string name="ok_label">OK</string>
-    <string name="about_text">\
-        This game is played just like regular Tic Tac Toe with one difference: to
-        win a tile you have to win a smaller game of Tic Tac Toe inside that tile.\n\
-        \n\
-        A tie happens when there are no further moves. In the case of a tie in a small
-        board, that will count as a win for both sides in the larger game.
+    <string name="about_text">
+        Scroggle game has two phases.\n\n
+        Phase 1 (90 sec) \nPlayer try to find word in each of the 9 smaller 3X3 board.\n\n
+        Phase 2 (30 sec) \nOnly matched word selected from phase 1 will be kept and player need find word using one letter from each remaining word.\n\n
+        How to select word? \nClick on any letter to start and continue with its neighbour letter.\n\n
+        How to go back a step? \nClick on the last word you selected again, will go back to last step. The last word is indicated by animation.\n\n
+        How to win? \nA score is calculated as you play, the higher score the better.\n\n
+        How is the score calculated? \nIn phase 1, score = length of word * 5; in phase 2, score = length * 10. Final socre is sum of scores from phase 1 and 2.\n\n
     </string>
 </resources>
