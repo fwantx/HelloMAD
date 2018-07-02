@@ -12,6 +12,7 @@
     <string name="label_version_code">Version Code</string>
     <string name="labe_unique_id">Unique ID</string>
     <string name="type_a_word">Type a word here ...</string>
+    <string name="type_name">Type name for word game ...</string>
     <string name="word_list_title">Words added:</string>
     <string name="dictionary">Dicionary</string>
     <string name="acknowledgments">Acknowledgments</string>
@@ -30,6 +31,10 @@
     <string name="declare_winner">%1$s is the winner</string>
     <string name="continue_label">Continue</string>
     <string name="new_game_label">New Game</string>
+    <string name="change_name">Change Name</string>
+    <string name="leaderboard">Leaderboard</string>
+    <string name="kudos">Kudos</string>
+    <string name="scoreboard">Scoreboard</string>
     <string name="about_title">About Ultimate Tic Tac Toe</string>
     <string name="about_label">How to play</string>
     <string name="ok_label">OK</string>

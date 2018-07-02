@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "362798960138",
+    "firebase_url": "https://hellomad-b0fe7.firebaseio.com",
+    "project_id": "hellomad-b0fe7",
+    "storage_bucket": "hellomad-b0fe7.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:362798960138:android:f1e266c854760957",
+        "android_client_info": {
+          "package_name": "edu.neu.madcourse.fengwan"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "362798960138-v1bsm3hah2bvtueb7vkqm0t5s51ttni4.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "edu.neu.madcourse.fengwan",
+            "certificate_hash": "b220ab2e2e355a2efb3648d0dde19d35e5eef46f"
+          }
+        },
+        {
+          "client_id": "362798960138-59qi6oas338oku6gbiuhcopds56uj15b.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBbtvmbvr4mHtkfemCv3jOw_Vsim3b5WTw"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "362798960138-59qi6oas338oku6gbiuhcopds56uj15b.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

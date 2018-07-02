@@ -37,6 +37,33 @@
         android:text="@string/new_game_label"/>
 
     <Button
+        android:id="@+id/change_name_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_margin="@dimen/menu_button_margin"
+        android:padding="@dimen/menu_button_padding"
+        android:text="@string/change_name"/>
+
+    <Button
+        android:id="@+id/leaderboard_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_margin="@dimen/menu_button_margin"
+        android:padding="@dimen/menu_button_padding"
+        android:text="@string/leaderboard"/>
+
+    <Button
+        android:id="@+id/scoreboard_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_margin="@dimen/menu_button_margin"
+        android:padding="@dimen/menu_button_padding"
+        android:text="@string/scoreboard"/>
+
+    <Button
         android:id="@+id/about_button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

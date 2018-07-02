@@ -24,6 +24,10 @@ public class WordGameFragment extends Fragment {
         View continueButton = rootView.findViewById(R.id.continue_button);
         View aboutButton = rootView.findViewById(R.id.about_button);
         View ackButton = rootView.findViewById(R.id.acknowledgements_button);
+        View changeNameButton = rootView.findViewById(R.id.change_name_button);
+        View leaderboardButton = rootView.findViewById(R.id.leaderboard_button);
+        View scoreboardButton = rootView.findViewById(R.id.scoreboard_button);
+
         newButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -53,6 +57,27 @@ public class WordGameFragment extends Fragment {
                             }
                         });
                 mDialog = builder.show();
+            }
+        });
+        changeNameButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), ChangeNameActivity.class);
+                getActivity().startActivity(intent);
+            }
+        });
+        leaderboardButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), LeaderboardActivity.class);
+                getActivity().startActivity(intent);
+            }
+        });
+        scoreboardButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), ScoreboardActivity.class);
+                getActivity().startActivity(intent);
             }
         });
         ackButton.setOnClickListener(new View.OnClickListener() {

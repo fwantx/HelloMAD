@@ -17,6 +17,11 @@ import java.util.Random;
 import java.util.HashSet;
 import java.util.Set;
 
+import edu.neu.madcourse.fengwan.daos.GameDao;
+import edu.neu.madcourse.fengwan.daos.UserDao;
+import edu.neu.madcourse.fengwan.models.Game;
+import edu.neu.madcourse.fengwan.models.User;
+
 public class GameFragment extends Fragment {
     // Data structures go here...
     static private int mLargeIds[] = {R.id.large1, R.id.large2, R.id.large3,
@@ -37,6 +42,12 @@ public class GameFragment extends Fragment {
     private TextView phaseView, timeView, scoreView;
     private Set<String> dictionary;
 
+    private User user;
+    private UserDao userDao;
+    private Game game;
+    private String gameFirebaseKey;
+    private GameDao gameDao;
+
     public void setDictionary(Set<String> dictionary) {
         this.dictionary = dictionary;
     }
@@ -46,6 +57,11 @@ public class GameFragment extends Fragment {
         super.onCreate(savedInstanceState);
         // Retain this fragment across configuration changes.
         setRetainInstance(true);
+
+        user = new User();
+        userDao = new UserDao();
+        userDao.addUser(user);
+        gameDao = new GameDao();
         initGame();
 
         runnable = new Runnable() {
@@ -58,7 +74,7 @@ public class GameFragment extends Fragment {
 
     private void startTimer() {
         if (phaseValue == 1) {
-            timeView.setText("Time Left:\n" + (timeValue - 90));
+            timeView.setText("Time Left:\n" + (timeValue - 30));
         } else if (phaseValue == 2){
             timeView.setText("Time Left:\n" + timeValue);
         }
@@ -67,7 +83,7 @@ public class GameFragment extends Fragment {
         } else if (dictionary.isEmpty()) {
             handler.postDelayed(runnable, 1000);
         } else {
-            if (timeValue == 90) {
+            if (timeValue == 30) {
                 clearBadWords();
                 phaseValue = 2;
                 phaseView.setText("Phase:\n" + phaseValue);
@@ -268,7 +284,6 @@ public class GameFragment extends Fragment {
                 'l', 'n', 'i', 'i', 't', 'n', 'g', 'h', 'g',    // lightning
         };
 
-        Random random = new Random();
         mEntireBoard = new Tile(this, 'a', 0);
         // Create all the tiles
         for (int large = 0; large < 9; large++) {
@@ -282,9 +297,12 @@ public class GameFragment extends Fragment {
         mEntireBoard.setSelectedTiles(new ArrayDeque<Tile>());
 
         phaseValue = 1;
-        timeValue = 180;
+        timeValue = 120;
         scoreValue = 0;
         updateAvailable();
+
+        game = new Game(scoreValue);
+        gameFirebaseKey = gameDao.addGame(game);
     }
 
     private boolean areAdjacentTiles(int a, int b) {
@@ -380,6 +398,8 @@ public class GameFragment extends Fragment {
             }
         }
         scoreView.setText("Score:\n" + scoreValue);
+        game.setScore(scoreValue);
+        gameDao.updateGame(game, gameFirebaseKey);
     }
 
     /** Create a string containing the state of the game. */
